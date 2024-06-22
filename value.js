@@ -203,4 +203,22 @@ export const documentDetails = [
         subDivision: "no",
         description: "General Power of Attorney given for consideration"
     },
+    {
+        type: "Release Deed With Family",
+        stampDuty: 0.01,
+        regFees: 0.01,
+        maxStamp: 40000,
+        maxFees: 10000,
+        subDivision: "no",
+        description: ""
+    },
+    {
+        type: "Release Deed With Non Family",
+        stampDuty: 0.07,
+        regFees: 0.01,
+        maxStamp: 0,
+        maxFees: 0,
+        subDivision: "no",
+        description: ""
+    },
 ]
