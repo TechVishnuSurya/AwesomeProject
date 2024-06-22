@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import { MyContext } from '../context/MyContext';
 
@@ -63,7 +64,7 @@ export default function SaleDeed({ route, navigation }) {
             data.stampValue = stValue > documentDetail.maxStamp ? documentDetail.maxStamp : stValue;
         }
         data.regFees = rgFees > documentDetail.maxFees ? documentDetail.maxFees : rgFees;
-    } else if (documentDetail.type === "Settlement With Family" || documentDetail.type === "Partition With Family") {
+    } else if (documentDetail.type === "Settlement With Family" || documentDetail.type === "Partition With Family" || documentDetail.type === "Release Deed With Family") {
         const stValue = Math.ceil(numericValue * documentDetail.stampDuty);
         const rgFees = Math.ceil(numericValue * documentDetail.regFees);
         data.stampValue = stValue > documentDetail.maxStamp ? documentDetail.maxStamp : stValue;
@@ -71,18 +72,31 @@ export default function SaleDeed({ route, navigation }) {
         if (documentDetail.subDivision === "yes") {
             data.subDivisionFees = subDivisionValue * (data.landType === 'rural' ? 400 : 600);
         }
-    } else if (documentDetail.type === "Settlement With Non Family" || documentDetail.type === "Partition With Non Family") {
+    } else if (documentDetail.type === "Settlement With Non Family" || documentDetail.type === "Partition With Non Family" || documentDetail.type === "Power To Sell Immovable Property With Non Family" || documentDetail.type === "Power To Market Value" || documentDetail.type === "Release Deed With Non Family") {
         data.stampValue = Math.ceil(numericValue * documentDetail.stampDuty);
         data.regFees = Math.ceil(numericValue * documentDetail.regFees);
         if (documentDetail.subDivision === "yes") {
             data.subDivisionFees = subDivisionValue * (data.landType === 'rural' ? 400 : 600);
         }
-    } else if (documentDetail.type === "Will" || documentDetail.type === "Receipt") {
+    } else if (documentDetail.type === "Will" || documentDetail.type === "Receipt" || documentDetail.type === "Power To Sell Immovable Property With Family" || documentDetail.type === "Power To Sell Movable Property and other purposes") {
         data.stampValue = documentDetail.stampDuty
         data.regFees = documentDetail.regFees
-    } else if (documentDetail.type === "Receipt") {
-        data.stampValue = documentDetail.stampDuty;
-        data.regFees = documentDetail.regFees;
+    } else if (documentDetail.type === "Partnership Deed") {
+        data.stampValue = numericValue <= 500 ? documentDetail.stampDuty : documentDetail.maxStamp
+        data.regFees = Math.ceil(numericValue * documentDetail.regFees);
+    } else if (documentDetail.type === "Lease Deed") {
+        let stampPercentage = 0;
+        if (data.leaseYears === "Below 30 years") {
+            stampPercentage = documentDetail.stampDuty[0]
+        } else if (data.leaseYears === "Below 99 years") {
+            stampPercentage = documentDetail.stampDuty[1]
+        } else if (data.leaseYears === "Above 99 years") {
+            stampPercentage = documentDetail.stampDuty[2]
+        }
+
+        data.stampValue = Math.ceil(numericValue * stampPercentage);
+        const rgFees = Math.ceil(numericValue * documentDetail.regFees);
+        data.regFees = rgFees > documentDetail.maxFees ? documentDetail.maxFees : rgFees;
     }
 
     // Assuming cdFees and welfareFees are defined somewhere in the data object
@@ -99,6 +113,24 @@ export default function SaleDeed({ route, navigation }) {
                 keyboardType="numeric"
             />
             {errors.textInputValue && <Text style={styles.errorText}>{errors.textInputValue}</Text>}
+
+            {
+                documentDetail.type === "Lease Deed" ? (
+                    <View>
+                        <Text style={styles.txt}>Years</Text>
+                        <Picker
+                            selectedValue={data.leaseYears}
+                            onValueChange={(itemValue) => setData(prevData => ({ ...prevData, leaseYears: itemValue }))}
+                            style={styles.picker}
+                        >
+                            <Picker.Item label="Below 30 years" value="Below 30 years" style={styles.pickerItem} />
+                            <Picker.Item label="Below 99 years" value="Below 99 years" style={styles.pickerItem} />
+                            <Picker.Item label="Above 99 years" value="Above 99 years" style={styles.pickerItem} />
+                        </Picker>
+                    </View>
+                ) : null
+            }
+
 
             <Text style={styles.txt}>Extra Page</Text>
             <TextInput
@@ -164,6 +196,17 @@ export default function SaleDeed({ route, navigation }) {
 const styles = StyleSheet.create({
     container: {
         padding: 16,
+    },
+    picker: {
+        backgroundColor: 'orange',
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius: 4,
+        height: 50,
+        marginBottom: 16,
+    },
+    pickerItem: {
+        fontSize: 18,
     },
     txt: {
         color: "black",

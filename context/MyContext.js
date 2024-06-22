@@ -14,6 +14,7 @@ export const MyProvider = ({ children }) => {
         extraPage: 0,
         landType: 'rural',
         subdivision: 0,
+        leaseYears: "",
         stampValue: 0,
         regFees: 0,
         computerFees: 200,

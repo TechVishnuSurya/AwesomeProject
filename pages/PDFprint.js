@@ -9,13 +9,18 @@ export default function PDFprint({ navigation }) {
 
     const { data, setData } = useContext(MyContext)
 
-   
+
 
     const printHTML = async () => {
         const inputsHTML = data.inputs.map(input => `
             <p><strong>${input.name}:</strong> ${input.value}</p>
         `).join('');
-    
+
+        let checkLeaseYears;
+        if (data.leaseYears !== "") {
+            checkLeaseYears = `<p><strong>Lease Years:</strong> ${data.leaseYears}</p>`
+        }
+
         const htmlContent = `
             <html>
                 <body style="text-align: center;">
@@ -34,6 +39,8 @@ export default function PDFprint({ navigation }) {
                         <h2 style="text-align: center; color: white;">Government Fees</h2>
                     </div>
                    
+                    ${checkLeaseYears}
+
                     <p><strong>Stamp Duty:</strong> ${data.stampValue}</p>
                     <p><strong>Registration Fees:</strong> ${data.regFees}</p>
                     <p><strong>Computer Fees:</strong> ${data.computerFees}</p>
@@ -58,7 +65,7 @@ export default function PDFprint({ navigation }) {
                     </body>
             </html>
         `;
-    
+
         try {
             await Print.printAsync({
                 html: htmlContent,
@@ -67,7 +74,7 @@ export default function PDFprint({ navigation }) {
             console.error("Error printing document: ", error);
         }
     };
-    
+
 
 
 
@@ -82,13 +89,17 @@ export default function PDFprint({ navigation }) {
             <Text style={styles.txt1}>Document Type: {`${data.selectedDocumentType}`}</Text>
             <Text style={styles.txt1}>Value: {`${data.textInputValue}`}</Text>
 
+            {
+                data.leaseYears !== "" ? <Text style={styles.txt1}>Lease Years: {`${data.leaseYears}`}</Text> : null
+            }
+
             <Text style={styles.txt1}>Stamp Duty: {`${data.stampValue}`}</Text>
             <Text style={styles.txt1}>Registration Fees: {`${data.regFees}`}</Text>
             <Text style={styles.txt1}>Computer Fees: {`${data.computerFees}`}</Text>
             <Text style={styles.txt1}>CD Fees: {`${data.cdFees}`}</Text>
             <Text style={styles.txt1}>SubDivision Fees: {`${data.subDivisionFees}`}</Text>
             <Text style={styles.txt1}>Welfare Fees: {`${data.welfareFees}`}</Text>
-            
+
             <Text style={styles.txt1}>Total Government Fees: {`${data.govtFeesTotal}`}</Text>
 
             <Text style={styles.txt1}>Document writer and Other Charges</Text>

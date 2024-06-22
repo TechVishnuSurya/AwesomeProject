@@ -221,4 +221,22 @@ export const documentDetails = [
         subDivision: "no",
         description: ""
     },
+    {
+        type: "Partnership Deed",
+        stampDuty: 50,
+        regFees: 0.01,
+        maxStamp: 1000,
+        maxFees: 0,
+        subDivision: "no",
+        description: ""
+    },
+    {
+        type: "Lease Deed",
+        stampDuty: [0.01,0.04,0.07],
+        regFees: 0.01,
+        maxStamp: 0,
+        maxFees: 40000,
+        subDivision: "no",
+        description: ""
+    },
 ]
