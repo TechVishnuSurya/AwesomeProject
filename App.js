@@ -12,6 +12,7 @@ import LandAreaCalculation from './pages/LandAreaCalculation';
 import WriterOrAdvocateProfile from './pages/WriterOrAdvocateProfile';
 import FirstPage from './pages/FirstPage';
 import PublicProfile from './pages/PublicProfile';
+import Profile from './pages/Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +21,7 @@ export default function App() {
     <MyProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="FirstPage">
-
+          <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="FirstPage" component={FirstPage} />
           <Stack.Screen name="PublicProfile" component={PublicProfile} />
           <Stack.Screen name="WriterOrAdvocateProfile" component={WriterOrAdvocateProfile} />

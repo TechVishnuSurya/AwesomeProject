@@ -155,7 +155,7 @@ export const documentDetails = [
         regFees: 0.01,
         maxStamp: 40000,
         maxFees: 10000,
-        subDivision: "no",
+        subDivision: "yes",
         description: "Each Share"
     },
     {
@@ -164,7 +164,7 @@ export const documentDetails = [
         regFees: 0.01,
         maxStamp: 0,
         maxFees: 0,
-        subDivision: "no",
+        subDivision: "yes",
         description: "Separated Share"
     },
     {
@@ -209,7 +209,7 @@ export const documentDetails = [
         regFees: 0.01,
         maxStamp: 40000,
         maxFees: 10000,
-        subDivision: "no",
+        subDivision: "yes",
         description: ""
     },
     {
@@ -218,7 +218,7 @@ export const documentDetails = [
         regFees: 0.01,
         maxStamp: 0,
         maxFees: 0,
-        subDivision: "no",
+        subDivision: "yes",
         description: ""
     },
     {

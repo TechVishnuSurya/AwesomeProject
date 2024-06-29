@@ -4,8 +4,12 @@ export const MyContext = createContext();
 
 export const MyProvider = ({ children }) => {
     const [data, setData] = useState({
+        profile: "",
         officeName: "",
         phoneNo:"",
+        email:"",
+        address: "",
+        password:"",
         customerName: "",
         subRegisterOffice: "",
         village: "",
