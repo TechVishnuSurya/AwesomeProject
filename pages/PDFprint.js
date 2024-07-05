@@ -2,13 +2,20 @@ import React, { useContext } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import * as Print from 'expo-print';
 import { MyContext } from '../context/MyContext';
-
+import { documentDetails, documentType } from '../value';
 
 
 export default function PDFprint({ navigation }) {
 
     const { data, setData } = useContext(MyContext)
 
+    const handleNavigate = () => {
+      
+            navigation.navigate("Government Value", {
+                documentDetails
+            });
+      
+    };
 
 
     const printHTML = async () => {
@@ -80,18 +87,22 @@ export default function PDFprint({ navigation }) {
 
     return (
         <View style={styles.container}>
-
-            <Text style={styles.txt1}>Office Name: {`${data.officeName}`}</Text>
-            <Text style={styles.txt1}>Phone No: {`${data.phoneNo}`}</Text>
-            <Text style={styles.txt1}>Customer Name: {`${data.customerName}`}</Text>
-            <Text style={styles.txt1}>Sub Register Office: {`${data.subRegisterOffice}`}</Text>
-            <Text style={styles.txt1}>Village: {`${data.village}`}</Text>
-            <Text style={styles.txt1}>Document Type: {`${data.selectedDocumentType}`}</Text>
-            <Text style={styles.txt1}>Value: {`${data.textInputValue}`}</Text>
-
             {
-                data.leaseYears !== "" ? <Text style={styles.txt1}>Lease Years: {`${data.leaseYears}`}</Text> : null
+                data.profile === "WriterOrAdvocate" ? <View>
+                    <Text style={styles.txt1}>Office Name: {`${data.officeName}`}</Text>
+                    <Text style={styles.txt1}>Phone No: {`${data.phoneNo}`}</Text>
+                    <Text style={styles.txt1}>Customer Name: {`${data.customerName}`}</Text>
+                    <Text style={styles.txt1}>Sub Register Office: {`${data.subRegisterOffice}`}</Text>
+                    <Text style={styles.txt1}>Village: {`${data.village}`}</Text>
+                    <Text style={styles.txt1}>Document Type: {`${data.selectedDocumentType}`}</Text>
+                    <Text style={styles.txt1}>Value: {`${data.textInputValue}`}</Text>
+
+                    {
+                        data.leaseYears !== "" ? <Text style={styles.txt1}>Lease Years: {`${data.leaseYears}`}</Text> : null
+                    }
+                </View> : null
             }
+
 
             <Text style={styles.txt1}>Stamp Duty: {`${data.stampValue}`}</Text>
             <Text style={styles.txt1}>Registration Fees: {`${data.regFees}`}</Text>
@@ -101,27 +112,40 @@ export default function PDFprint({ navigation }) {
             <Text style={styles.txt1}>Welfare Fees: {`${data.welfareFees}`}</Text>
 
             <Text style={styles.txt1}>Total Government Fees: {`${data.govtFeesTotal}`}</Text>
-
-            <Text style={styles.txt1}>Document writer and Other Charges</Text>
             {
-                data.inputs.map((input, index) => {
-                    return (
-                        <View key={input.id} style={styles.inputContainer}>
-                            <Text style={styles.txt1}>{`${input.name} : ${input.value}`}</Text>
-                        </View>
-                    );
-                })
+                data.profile === "WriterOrAdvocate" ? <View>
+                    <Text style={styles.txt1}>Document writer and Other Charges</Text>
+                    {
+                        data.inputs.map((input, index) => {
+                            return (
+                                <View key={input.id} style={styles.inputContainer}>
+                                    <Text style={styles.txt1}>{`${input.name} : ${input.value}`}</Text>
+                                </View>
+                            );
+                        })
+                    }
+
+                    <Text style={styles.txt1}>Total Writer Fees: {`${data.writerFeesTotal}`}</Text>
+
+                    <Text style={styles.txt1}>Total Overall Fees: {`${data.govtFeesTotal + data.writerFeesTotal}`}</Text>
+
+                    <Button title="Create PDF" onPress={printHTML} />
+
+                    <Button
+                        title="Back to Writer Fees Page"
+                        onPress={() => navigation.navigate('WriterOrAdvocateFees')}
+                    />
+                </View> : null
             }
 
-            <Text style={styles.txt1}>Total Writer Fees: {`${data.writerFeesTotal}`}</Text>
-
-            <Text style={styles.txt1}>Total Overall Fees: {`${data.govtFeesTotal + data.writerFeesTotal}`}</Text>
-
-            <Button title="Create PDF" onPress={printHTML} />
-            <Button
-                title="Back to Writer Fees Page"
-                onPress={() => navigation.navigate('WriterOrAdvocateFees')}
-            />
+            {
+                data.profile !== "WriterOrAdvocate" ? <View>
+                    <Button
+                        title="Back to Government Value"
+                        onPress={handleNavigate}
+                    />
+                </View> : null
+            }
         </View>
     );
 }

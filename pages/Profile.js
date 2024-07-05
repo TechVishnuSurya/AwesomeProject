@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-nat
 import { initializeApp } from '@firebase/app';
 import { initializeAuth, getReactNativePersistence, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 import { MyContext } from '../context/MyContext';
 
 const firebaseConfig = {
@@ -40,12 +41,14 @@ const AuthScreen = ({ email, setEmail, password, setPassword, officeName, setOff
         placeholder="Password"
         secureTextEntry
       />
-      <TextInput
-        style={styles.input}
-        value={officeName}
-        onChangeText={setOfficeName}
-        placeholder="Office Name"
-      />
+      {!isLogin && (
+        <TextInput
+          style={styles.input}
+          value={officeName}
+          onChangeText={setOfficeName}
+          placeholder="Office Name"
+        />
+      )}
       <View style={styles.buttonContainer}>
         <Button title={isLogin ? 'Sign In' : 'Sign Up'} onPress={handleAuthentication} color="#3498db" />
       </View>
@@ -57,13 +60,15 @@ const AuthScreen = ({ email, setEmail, password, setPassword, officeName, setOff
       </View>
     </View>
   );
-}
+};
 
-const AuthenticatedScreen = ({ user, handleAuthentication }) => {
+const AuthenticatedScreen = ({ user, officeName, handleAuthentication }) => {
   return (
     <View style={styles.authContainer}>
       <Text style={styles.title}>Welcome</Text>
-      <Text style={styles.emailText}>{user.email}</Text>
+      <Text style={styles.emailText}>Email: {user.email}</Text>
+      <Text style={styles.emailText}>UID: {user.uid}</Text>
+      <Text style={styles.emailText}>Office Name: {officeName}</Text>
       <Button title="Logout" onPress={handleAuthentication} color="#e74c3c" />
     </View>
   );
@@ -75,14 +80,24 @@ const Profile = () => {
   const [officeName, setOfficeName] = useState('');
   const [user, setUser] = useState(null);
   const [isLogin, setIsLogin] = useState(true);
-  
+  const [userOfficeName, setUserOfficeName] = useState('');
+
   const { data, setData } = useContext(MyContext);
 
   const auth = getAuth(app);
   
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUser(user);
+        const doc = await firestore().collection('users').doc(user.uid).get();
+        if (doc.exists) {
+          setUserOfficeName(doc.data().officeName);
+        }
+      } else {
+        setUser(null);
+        setUserOfficeName('');
+      }
     });
 
     return () => unsubscribe();
@@ -94,16 +109,28 @@ const Profile = () => {
         // If user is already authenticated, log out
         console.log('User logged out successfully!');
         await signOut(auth);
+        setUser(null);
+        setUserOfficeName('');
       } else {
         // Sign in or sign up
         if (isLogin) {
           // Sign in
-          await signInWithEmailAndPassword(auth, email, password);
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
           console.log('User signed in successfully!');
+          setUser(userCredential.user);
+          const doc = await firestore().collection('users').doc(userCredential.user.uid).get();
+          if (doc.exists) {
+            setUserOfficeName(doc.data().officeName);
+          }
         } else {
           // Sign up
-          await createUserWithEmailAndPassword(auth, email, password);
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           console.log('User created successfully!');
+          setUser(userCredential.user);
+          await firestore().collection('users').doc(userCredential.user.uid).set({
+            officeName: officeName,
+          });
+          setUserOfficeName(officeName);
         }
       }
     } catch (error) {
@@ -114,7 +141,7 @@ const Profile = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {user ? (
-        <AuthenticatedScreen user={user} handleAuthentication={handleAuthentication} />
+        <AuthenticatedScreen user={user} officeName={userOfficeName} handleAuthentication={handleAuthentication} />
       ) : (
         <AuthScreen
           email={email}

@@ -1,46 +1,76 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native';
 import Svg, { Polygon } from 'react-native-svg';
 
 export default function LandAreaCalculation() {
-  const [north, setNorth] = useState(0);
-  const [south, setSouth] = useState(0);
-  const [east, setEast] = useState(0);
-  const [west, setWest] = useState(0);
+
+  const [north, setNorth] = useState('0');
+  const [south, setSouth] = useState('0');
+  const [east, setEast] = useState('0');
+  const [west, setWest] = useState('0');
 
   const [northEast, setNorthEast] = useState('0');
   const [southEast, setSouthEast] = useState('0');
   const [southWest, setSouthWest] = useState('0');
   const [northWest, setNorthWest] = useState('0');
 
-  let totalSquareFeet = 0
-  let points;
+  let totalSquareFeet = 0;
+  let points = "80,40 280,40 280,240 80,240";
 
-  if (north === south && east === west) {
-    totalSquareFeet = north * east
-  } else if (north !== south || east !== west) {
-    const ns = (parseInt(north) + parseInt(south)) / 2
-    const ew = (parseInt(east) + parseInt(west)) / 2
-    totalSquareFeet = ns * ew
+  const n = parseInt(north);
+  const s = parseInt(south);
+  const e = parseInt(east);
+  const w = parseInt(west);
+  const ne = parseInt(northEast);
+  const se = parseInt(southEast);
+  const sw = parseInt(southWest);
+  const nw = parseInt(northWest);
+
+
+  if (ne > 0) {
+    console.log("northest:", ne)
+    const swMid = s * w;
+    const splay = (Math.abs(s - n) * Math.abs(w - e)) / 2;
+    totalSquareFeet = swMid - splay;
+  } else if (se > 0) {
+    const nwMid = n * w;
+    const splay = (Math.abs(n - s) * Math.abs(w - e)) / 2;
+    totalSquareFeet = nwMid - splay;
+  } else if (sw > 0) {
+    const neMid = n * e;
+    const splay = (Math.abs(n - s) * Math.abs(e - w)) / 2;
+    totalSquareFeet = neMid - splay;
+  } else if (nw > 0) {
+    const seMid = s * e;
+    const splay = (Math.abs(s - n) * Math.abs(e - w)) / 2;
+    totalSquareFeet = seMid - splay;
+  } else if (n === s && e === w) {
+    totalSquareFeet = n * e;
+  } else {
+    const nsMid = (n + s) / 2;
+    const ewMid = (e + w) / 2;
+    totalSquareFeet = nsMid * ewMid;
   }
 
-
-
-  if (north === south && east === west) {
-    points = "80,40 280,40 280,240 80,240"
-  } else if (north < south && west < east) {
-    points = "80,40 280,40 280,240 80,200"
-    // DON'T DELETE points="80,40 240,40 240,240 40,240 40,80"
-  } else if (north > south && east > west) {
-    points = "80,40 280,40 280,240 90,200"
-  } else if (north < south && east > west) {
-    points = "80,40 280,40 280,240 80,200"
-  } else if (north > south && east < west) {
-    points = "80,40 280,40 280,160 90,240"
-  } 
+  if (ne > 0 && n !== s && e !== w) {
+    console.log("northeast")
+    points = "80,40 280,40 300,60 300,240 80,240";
+  } else if (n === s && e === w) {
+    points = "80,40 280,40 280,240 80,240";
+  } else if (n < s && w < e) {
+    points = "80,40 280,40 280,240 80,200";
+  } else if (n > s && e > w) {
+    points = "80,40 280,40 280,240 90,200";
+  } else if (n < s && e > w) {
+    points = "80,40 280,40 280,240 80,200";
+  } else if (n > s && e < w) {
+    points = "80,40 280,40 280,160 90,240";
+  } else if (n < s && e < w) {
+    points = "80,40 280,40 280,160 90,240";
+  }
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Svg height="300" width="350">
         <Polygon
           points={points}
@@ -52,7 +82,6 @@ export default function LandAreaCalculation() {
       </Svg>
 
       <View style={styles.gridContainer}>
-
         <Text style={styles.label}>North</Text>
         <TextInput
           style={styles.textInput}
@@ -93,7 +122,6 @@ export default function LandAreaCalculation() {
       </View>
 
       <View style={styles.gridContainer}>
-
         <Text style={styles.label}>NorthEast</Text>
         <TextInput
           style={styles.textInput}
@@ -101,6 +129,7 @@ export default function LandAreaCalculation() {
           value={northEast}
           placeholder="NorthEast side Measurement"
           keyboardType="numeric"
+          editable={southEast > 0 || southWest > 0 || northWest > 0 ? false : true}
         />
 
         <Text style={styles.label1}>SouthEast</Text>
@@ -110,6 +139,7 @@ export default function LandAreaCalculation() {
           value={southEast}
           placeholder="SouthEast side Measurement"
           keyboardType="numeric"
+          editable={northEast > 0 || southWest > 0 || northWest > 0 ? false : true}
         />
       </View>
 
@@ -121,6 +151,7 @@ export default function LandAreaCalculation() {
           value={southWest}
           placeholder="SouthWest side Measurement"
           keyboardType="numeric"
+          editable={northEast > 0 || southEast > 0 || northWest > 0 ? false : true}
         />
 
         <Text style={styles.label1}>NorthWest</Text>
@@ -130,12 +161,12 @@ export default function LandAreaCalculation() {
           value={northWest}
           placeholder="NorthWest side Measurement"
           keyboardType="numeric"
+          editable={northEast > 0 || southEast > 0 || southWest > 0 ? false : true}
         />
-
       </View>
 
       <Text style={styles.label1}>Total Square Feet: {`${totalSquareFeet}`}</Text>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -145,6 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: "flex-start",
+    padding: 16,
   },
   inputContainer: {
     marginTop: 10,
@@ -155,7 +187,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 8,
     right: 10
-
   },
   label1: {
     color: 'black',
@@ -184,31 +215,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     left: 20
   },
-  measurements: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    columnGap: 10
-  },
-
   gridContainer: {
     display: "flex",
     flexDirection: "row"
-
-  },
-  gridItem: {
-
-    maxWidth: "25%", // 100% devided by the number of rows you want
-    alignItems: "center",
-
-    // my visual styles; not important for the grid
-    padding: 10,
-    backgroundColor: "rgba(249, 180, 45, 0.25)",
-    borderWidth: 1.5,
-    borderColor: "#fff"
-  },
-  gridItem1: {
-    width: "auto",
-    backgroundColor: "rgba(249, 180, 45, 0.25)",
   }
 });

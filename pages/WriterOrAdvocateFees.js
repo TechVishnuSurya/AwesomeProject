@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Text, View, StyleSheet, TextInput, Button } from 'react-native';
 import { MyContext } from '../context/MyContext';
+import { documentDetails, documentType } from '../value';
 
 export default function DocumentDetails({ navigation }) {
     const { data, setData } = useContext(MyContext);
@@ -42,6 +43,13 @@ export default function DocumentDetails({ navigation }) {
         return total + (isNaN(value) ? 0 : value);
     }, 0);
 
+    const handleNavigate = () => {
+      
+        navigation.navigate("Government Value", {
+            documentDetails
+        });
+  
+};
     return (
         <View style={styles.container}>
             <Text style={styles.txt1}>Document writer and Other Charges</Text>
@@ -75,7 +83,7 @@ export default function DocumentDetails({ navigation }) {
             />
             <Button
                 title="Back to Government Value Page"
-                onPress={() => navigation.navigate('Government Value')}
+                onPress={handleNavigate}
             />
         </View>
     );

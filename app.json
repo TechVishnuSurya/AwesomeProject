@@ -1,28 +1,29 @@
 {
   "expo": {
     "name": "Registration Calculation",
-    "slug": "Registration Calculation",
+    "slug": "AwesomeProject",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/regCalculation.png",
+    "icon": "./assets/reg-logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/regCalculation.png",
+      "image": "./assets/reg-logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.suryaprakashvishnu.AwesomeProject"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/reg-logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.suryaprakashvishnu.AwesomeProject"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/reg-logo.png"
     },
     "extra": {
       "eas": {

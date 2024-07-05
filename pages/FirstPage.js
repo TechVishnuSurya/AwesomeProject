@@ -5,16 +5,17 @@ import { MyContext } from '../context/MyContext';
 export default function FirstPage({ navigation }) {
 
     const { data, setData } = useContext(MyContext);
+
     const writerOrAdvocate = () => {
 
-        navigation.navigate("Profile", {
+        navigation.navigate("DocumentType", {
             profile: "WriterOrAdvocate"
         });
 
     };
     const publicProfile = () => {
 
-        navigation.navigate("Profile", {
+        navigation.navigate("DocumentType", {
             profile: "Public"
         });
 
@@ -32,11 +33,14 @@ export default function FirstPage({ navigation }) {
                 title="Public"
                 onPress={publicProfile}
             />
-
-            <Button
+ <Button
+                title="Land Area Calculation"
+                onPress={() => navigation.navigate('LandAreaCalculation')}
+            />
+            {/* <Button
                 title="Go to Document Details"
                 onPress={() => navigation.navigate('DocumentType')}
-            />
+            /> */}
         </View>
     )
 

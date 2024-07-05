@@ -4,8 +4,9 @@ import { Picker } from '@react-native-picker/picker';
 import { MyContext } from '../context/MyContext';
 import { documentDetails, documentType } from '../value';
 
-export default function DocumentType({ navigation }) {
+export default function DocumentType({ route, navigation }) {
     const { data, setData } = useContext(MyContext);
+    const { profile } = route.params
     const [errors, setErrors] = useState({});
 
     const getSelectedData = documentDetails.filter(i => {
@@ -16,17 +17,23 @@ export default function DocumentType({ navigation }) {
         let valid = true;
         let tempErrors = {};
 
-        if (!data.officeName) {
+        if (!data.officeName && profile === "WriterOrAdvocate") {
             tempErrors.officeName = 'Office Name is required';
             valid = false;
+            console.log("officeName:")
         }
-        if (!data.phoneNo || !/^\d{10}$/.test(data.phoneNo)) {
-            tempErrors.phoneNo = 'Phone No is required and must be 10 digits';
-            valid = false;
+        if (!data.phoneNo && profile === "WriterOrAdvocate") {
+
+            if (!/^\d{10}$/.test(data.phoneNo)) {
+                tempErrors.phoneNo = 'Phone No is required and must be 10 digits';
+                valid = false;
+                console.log("phoneNo:")
+            }
         }
-        if (!data.customerName) {
+        if (!data.customerName && profile === "WriterOrAdvocate") {
             tempErrors.customerName = 'Customer Name is required';
             valid = false;
+            console.log("customerName:")
         }
         if (!data.subRegisterOffice) {
             tempErrors.subRegisterOffice = 'Sub Register Office is required';
@@ -42,11 +49,14 @@ export default function DocumentType({ navigation }) {
         }
 
         setErrors(tempErrors);
+        console.log("valid:", valid)
+        console.log("data:", data)
         return valid;
     };
 
     const handleNavigate = () => {
         if (validateFields()) {
+            setData({ ...data, profile: profile })
             navigation.navigate("Government Value", {
                 documentDetails: getSelectedData
             });
@@ -57,36 +67,40 @@ export default function DocumentType({ navigation }) {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.txt}>Office Name</Text>
-            <TextInput
-                style={styles.textInput}
-                onChangeText={(text) => setData(prevData => ({ ...prevData, officeName: text }))}
-                value={data.officeName}
-                placeholder="Enter office Name"
-                keyboardType="default"
-            />
-            {errors.officeName && <Text style={styles.errorText}>{errors.officeName}</Text>}
+            {
+                profile === "WriterOrAdvocate" ? <View>
 
-            <Text style={styles.txt}>Phone No</Text>
-            <TextInput
-                style={styles.textInput}
-                onChangeText={(text) => setData(prevData => ({ ...prevData, phoneNo: text }))}
-                value={data.phoneNo}
-                placeholder="Enter Phone No"
-                keyboardType="numeric"
-            />
-            {errors.phoneNo && <Text style={styles.errorText}>{errors.phoneNo}</Text>}
+                    <Text style={styles.txt}>Office Name</Text>
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={(text) => setData(prevData => ({ ...prevData, officeName: text }))}
+                        value={data.officeName}
+                        placeholder="Enter office Name"
+                        keyboardType="default"
+                    />
+                    {errors.officeName && <Text style={styles.errorText}>{errors.officeName}</Text>}
 
-            <Text style={styles.txt}>Customer Name</Text>
-            <TextInput
-                style={styles.textInput}
-                onChangeText={(text) => setData(prevData => ({ ...prevData, customerName: text }))}
-                value={data.customerName}
-                placeholder="Enter customer Name"
-                keyboardType="default"
-            />
-            {errors.customerName && <Text style={styles.errorText}>{errors.customerName}</Text>}
+                    <Text style={styles.txt}>Phone No</Text>
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={(text) => setData(prevData => ({ ...prevData, phoneNo: text }))}
+                        value={data.phoneNo}
+                        placeholder="Enter Phone No"
+                        keyboardType="numeric"
+                    />
+                    {errors.phoneNo && <Text style={styles.errorText}>{errors.phoneNo}</Text>}
 
+                    <Text style={styles.txt}>Customer Name</Text>
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={(text) => setData(prevData => ({ ...prevData, customerName: text }))}
+                        value={data.customerName}
+                        placeholder="Enter customer Name"
+                        keyboardType="default"
+                    />
+                    {errors.customerName && <Text style={styles.errorText}>{errors.customerName}</Text>}
+                </View> : null
+            }
             <Text style={styles.txt}>Sub Register Office</Text>
             <TextInput
                 style={styles.textInput}
@@ -126,10 +140,7 @@ export default function DocumentType({ navigation }) {
                 onPress={handleNavigate}
             />
 
-            <Button
-                title="Land Area Calculation"
-                onPress={() => navigation.navigate('LandAreaCalculation')}
-            />
+
         </ScrollView>
     );
 }

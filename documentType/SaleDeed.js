@@ -78,7 +78,7 @@ export default function SaleDeed({ route, navigation }) {
         if (documentDetail.subDivision === "yes") {
             data.subDivisionFees = subDivisionValue * (data.landType === 'rural' ? 400 : 600);
         }
-    } else if (documentDetail.type === "Will" || documentDetail.type === "Receipt" || documentDetail.type === "Power To Sell Immovable Property With Family" || documentDetail.type === "Power To Sell Movable Property and other purposes") {
+    } else if (documentDetail.type === "Will" || documentDetail.type === "Receipt" || documentDetail.type === "Power To Sell Immovable Property With Family" || documentDetail.type === "Power To Sell Movable Property and other purposes" || documentDetail.type ==="Adjudication") {
         data.stampValue = documentDetail.stampDuty
         data.regFees = documentDetail.regFees
     } else if (documentDetail.type === "Partnership Deed") {
@@ -102,6 +102,14 @@ export default function SaleDeed({ route, navigation }) {
     // Assuming cdFees and welfareFees are defined somewhere in the data object
     data.govtFeesTotal = data.stampValue + data.regFees + data.computerFees + (data.cdFees || 0) + (data.subDivisionFees || 0) + (data.welfareFees || 0);
 
+
+    const navigateDocumentType = () => {
+
+        navigation.navigate("DocumentType", {
+            profile: data.profile
+        });
+
+    };
     return (
         <View style={styles.container}>
             <Text style={styles.txt}>Value</Text>
@@ -172,22 +180,34 @@ export default function SaleDeed({ route, navigation }) {
                     />
                 </View>
             }
+            {
+                data.profile === "WriterOrAdvocate" ? <View>
+                    <Text style={styles.txt1}>Stamp Duty: {`${data.stampValue}`}</Text>
+                    <Text style={styles.txt1}>Registration Fees: {`${data.regFees}`}</Text>
+                    <Text style={styles.txt1}>Computer Fees: {`${data.computerFees}`}</Text>
+                    <Text style={styles.txt1}>CD Fees: {`${data.cdFees}`}</Text>
+                    <Text style={styles.txt1}>SubDivision Fees: {`${data.subDivisionFees}`}</Text>
+                    <Text style={styles.txt1}>Welfare Fees: {`${data.welfareFees}`}</Text>
+                    <Text style={styles.txt1}>Total: {`${data.govtFeesTotal}`}</Text>
+                </View> : null
+            }
 
-            <Text style={styles.txt1}>Stamp Duty: {`${data.stampValue}`}</Text>
-            <Text style={styles.txt1}>Registration Fees: {`${data.regFees}`}</Text>
-            <Text style={styles.txt1}>Computer Fees: {`${data.computerFees}`}</Text>
-            <Text style={styles.txt1}>CD Fees: {`${data.cdFees}`}</Text>
-            <Text style={styles.txt1}>SubDivision Fees: {`${data.subDivisionFees}`}</Text>
-            <Text style={styles.txt1}>Welfare Fees: {`${data.welfareFees}`}</Text>
-            <Text style={styles.txt1}>Total: {`${data.govtFeesTotal}`}</Text>
+            {
+                data.profile === "WriterOrAdvocate" ? <Button
+                    title="Go to Writer Fees"
+                    onPress={() => handleNavigate('WriterOrAdvocateFees')}
+                /> : null
+            }
+            {
+                data.profile !== "WriterOrAdvocate" ? <Button
+                    title="Next"
+                    onPress={() => handleNavigate('PDFprint')}
+                /> : null
+            }
 
-            <Button
-                title="Go to Writer Fees"
-                onPress={() => handleNavigate('WriterOrAdvocateFees')}
-            />
             <Button
                 title="Back to Document Type Page"
-                onPress={() => navigation.navigate('DocumentType')}
+                onPress={navigateDocumentType}
             />
         </View>
     );

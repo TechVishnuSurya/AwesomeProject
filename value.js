@@ -29,6 +29,7 @@ export const documentType = [
     "Power To Sell Immovable Property With Non Family",
     "Power To Sell Movable Property and other purposes",
     "Power To Market Value",
+    "Adjudication",
     "Release Deed With Family",
     "Release Deed With Non Family",
     "Partnership Deed",
@@ -204,6 +205,15 @@ export const documentDetails = [
         description: "General Power of Attorney given for consideration"
     },
     {
+        type: "Adjudication",
+        stampDuty: 5,
+        regFees: 1000,
+        maxStamp: 0,
+        maxFees: 0,
+        subDivision: "no",
+        description: ""
+    },
+    {
         type: "Release Deed With Family",
         stampDuty: 0.01,
         regFees: 0.01,
@@ -232,7 +242,7 @@ export const documentDetails = [
     },
     {
         type: "Lease Deed",
-        stampDuty: [0.01,0.04,0.07],
+        stampDuty: [0.01, 0.04, 0.07],
         regFees: 0.01,
         maxStamp: 0,
         maxFees: 40000,
