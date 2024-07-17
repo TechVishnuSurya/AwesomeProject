@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native';
 import Svg, { Polygon } from 'react-native-svg';
+import { Picker } from '@react-native-picker/picker';
 
 export default function LandAreaCalculation() {
 
@@ -13,6 +14,8 @@ export default function LandAreaCalculation() {
   const [southEast, setSouthEast] = useState('0');
   const [southWest, setSouthWest] = useState('0');
   const [northWest, setNorthWest] = useState('0');
+
+  const [convertArea, setConvertArea] = useState("Square Feet")
 
   let totalSquareFeet = 0;
   let points = "80,40 280,40 280,240 80,240";
@@ -53,12 +56,14 @@ export default function LandAreaCalculation() {
   }
 
   if (ne > 0 && n !== s && e !== w) {
-    console.log("northeast")
     points = "80,40 280,40 300,60 300,240 80,240";
-  }else if (se > 0 && n !== s && e !== w) {
-    console.log("northeast")
+  } else if (se > 0 && n !== s && e !== w) {
     points = "80,40 280,40 280,240 260,280 80,280";
-  }else if (n === s && e === w) {
+  } else if (sw > 0 && n !== s && e !== w) {
+    points = "80,40 280,40 280,280 100,280 80,260";
+  } else if (nw > 0 && n !== s && e !== w) {
+    points = "100,40 280,40 280,280 80,280 80,60";
+  } else if (n === s && e === w) {
     points = "80,40 280,40 280,240 80,240";
   } else if (n < s && w < e) {
     points = "80,40 280,40 280,240 80,200";
@@ -72,6 +77,10 @@ export default function LandAreaCalculation() {
     points = "80,40 280,40 280,160 90,240";
   }
 
+  const areafunction = (itemValue) => {
+    setConvertArea(itemValue);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Svg height="300" width="350">
@@ -82,7 +91,7 @@ export default function LandAreaCalculation() {
           strokeWidth="1"
           strokeLinejoin="round"
         />
-        
+
       </Svg>
 
       <View style={styles.gridContainer}>
@@ -169,7 +178,22 @@ export default function LandAreaCalculation() {
         />
       </View>
 
-      <Text style={styles.label1}>Total Square Feet: {`${totalSquareFeet}`}</Text>
+      <Text style={styles.label1}>Total area: {`${totalSquareFeet}`}</Text>
+
+      <Text style={styles.txt}>Convert Area</Text>
+      <Picker
+        selectedValue={convertArea}
+        onValueChange={areafunction}
+        style={styles.picker}
+      >
+        <Picker.Item key="Square Feet" label="Square Feet" value="Square Feet" style={styles.pickerItem} />
+        <Picker.Item key="Square Meter" label="Square Meter" value="Square Meter" style={styles.pickerItem} />
+        <Picker.Item key="Cent" label="Cent" value="Cent" style={styles.pickerItem} />
+        <Picker.Item key="Acre" label="Acre" value="Acre" style={styles.pickerItem} />
+        <Picker.Item key="Hectare" label="Hectare" value="Hectare" style={styles.pickerItem} />
+        <Picker.Item key="Ars" label="Ars" value="Ars" style={styles.pickerItem} />
+      </Picker>
+
     </ScrollView>
   );
 }
@@ -222,5 +246,17 @@ const styles = StyleSheet.create({
   gridContainer: {
     display: "flex",
     flexDirection: "row"
-  }
+  },
+  picker: {
+    backgroundColor: 'orange',
+    borderColor: 'black',
+    borderWidth: 100,
+    borderRadius: 4,
+    height: 10,
+    marginBottom: 32,
+    color:"black"
+  },
+  pickerItem: {
+    fontSize: 18,
+  },
 });

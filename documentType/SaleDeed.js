@@ -39,7 +39,7 @@ export default function SaleDeed({ route, navigation }) {
     const extraPageValue = parseInt(data.totalPage) || 0;
     const subDivisionValue = parseInt(data.subdivision) || 0;
 
-    data.computerFees = 200 + (extraPageValue > 0 ? (extraPageValue - 10) * 100 : 0);
+    data.computerFees = 200 + (extraPageValue > 10 ? (extraPageValue - 10) * 100 : 0);
 
     if (documentDetail.type === "SaleDeed" || documentDetail.type === "Exchange Deed") {
         data.stampValue = Math.ceil(numericValue * documentDetail.stampDuty);
