@@ -55,7 +55,10 @@ export default function LandAreaCalculation() {
   if (ne > 0 && n !== s && e !== w) {
     console.log("northeast")
     points = "80,40 280,40 300,60 300,240 80,240";
-  } else if (n === s && e === w) {
+  }else if (se > 0 && n !== s && e !== w) {
+    console.log("northeast")
+    points = "80,40 280,40 280,240 260,280 80,280";
+  }else if (n === s && e === w) {
     points = "80,40 280,40 280,240 80,240";
   } else if (n < s && w < e) {
     points = "80,40 280,40 280,240 80,200";
@@ -79,6 +82,7 @@ export default function LandAreaCalculation() {
           strokeWidth="1"
           strokeLinejoin="round"
         />
+        
       </Svg>
 
       <View style={styles.gridContainer}>

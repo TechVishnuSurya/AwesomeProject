@@ -88,7 +88,7 @@ export default function PDFprint({ navigation }) {
     return (
         <View style={styles.container}>
             {
-                data.profile === "WriterOrAdvocate" ? <View>
+                data.profile === "GenerateBill" ? <View>
                     <Text style={styles.txt1}>Office Name: {`${data.officeName}`}</Text>
                     <Text style={styles.txt1}>Phone No: {`${data.phoneNo}`}</Text>
                     <Text style={styles.txt1}>Customer Name: {`${data.customerName}`}</Text>
@@ -113,7 +113,7 @@ export default function PDFprint({ navigation }) {
 
             <Text style={styles.txt1}>Total Government Fees: {`${data.govtFeesTotal}`}</Text>
             {
-                data.profile === "WriterOrAdvocate" ? <View>
+                data.profile === "GenerateBill" ? <View>
                     <Text style={styles.txt1}>Document writer and Other Charges</Text>
                     {
                         data.inputs.map((input, index) => {
@@ -139,7 +139,7 @@ export default function PDFprint({ navigation }) {
             }
 
             {
-                data.profile !== "WriterOrAdvocate" ? <View>
+                data.profile !== "GenerateBill" ? <View>
                     <Button
                         title="Back to Government Value"
                         onPress={handleNavigate}

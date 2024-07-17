@@ -51,15 +51,15 @@ export const documentDetails = [
         subDivision: "yes",
         description: ""
     },
-    {
-        type: "SaleDeed New Apartment",
-        stampDuty: 0.00,
-        regFees: 0.00,
-        maxStamp: 0,
-        maxFees: 0,
-        subDivision: "yes",
-        description: ""
-    },
+    // {
+    //     type: "SaleDeed New Apartment",
+    //     stampDuty: 0.00,
+    //     regFees: 0.00,
+    //     maxStamp: 0,
+    //     maxFees: 0,
+    //     subDivision: "yes",
+    //     description: ""
+    // },
     {
         type: "Sale Aggreement",
         stampDuty: 200,
@@ -249,4 +249,49 @@ export const documentDetails = [
         subDivision: "no",
         description: ""
     },
+    {
+        type: "Cancellation Deed",
+        stampDuty: 1000,
+        regFees: 500,
+        maxStamp: 0,
+        maxFees: 0,
+        subDivision: "no",
+        description: ""
+    },
+    {
+        type: "Trust Deed",
+        stampDuty: 1000,
+        regFees: 0.01,
+        maxStamp: 0,
+        maxFees: 0,
+        subDivision: "no",
+        description: ""
+    },
+     // {
+    //     type: "Sale Certificate",
+    //     stampDuty: 0.00,
+    //     regFees: 0.00,
+    //     maxStamp: 0,
+    //     maxFees: 0,
+    //     subDivision: "no",
+    //     description: ""
+    // },
+     // {
+    //     type: "Rectification Deed",
+    //     stampDuty: 0.00,
+    //     regFees: 0.00,
+    //     maxStamp: 0,
+    //     maxFees: 0,
+    //     subDivision: "no",
+    //     description: ""
+    // },
+     // {
+    //     type: "Ratification Deed",
+    //     stampDuty: 0.00,
+    //     regFees: 0.00,
+    //     maxStamp: 0,
+    //     maxFees: 0,
+    //     subDivision: "no",
+    //     description: ""
+    // },
 ]

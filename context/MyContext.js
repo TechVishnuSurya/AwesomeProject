@@ -15,7 +15,7 @@ export const MyProvider = ({ children }) => {
         village: "",
         selectedDocumentType: "SaleDeed",
         textInputValue: 0,
-        extraPage: 0,
+        totalPage: 0,
         landType: 'rural',
         subdivision: 0,
         leaseYears: "",

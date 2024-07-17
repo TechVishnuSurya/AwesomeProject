@@ -6,14 +6,14 @@ export default function FirstPage({ navigation }) {
 
     const { data, setData } = useContext(MyContext);
 
-    const writerOrAdvocate = () => {
+    const GenerateBill = () => {
 
         navigation.navigate("DocumentType", {
-            profile: "WriterOrAdvocate"
+            profile: "GenerateBill"
         });
 
     };
-    const publicProfile = () => {
+    const RegistrationCalc = () => {
 
         navigation.navigate("DocumentType", {
             profile: "Public"
@@ -24,16 +24,19 @@ export default function FirstPage({ navigation }) {
 
     return (
         <View>
+
+
             <Button
-                title="Writer Or Advocate"
-                onPress={writerOrAdvocate}
+                title="Registration Calculation"
+                onPress={RegistrationCalc}
             />
 
             <Button
-                title="Public"
-                onPress={publicProfile}
+                title="Generate Bill"
+                onPress={GenerateBill}
             />
- <Button
+
+            <Button
                 title="Land Area Calculation"
                 onPress={() => navigation.navigate('LandAreaCalculation')}
             />

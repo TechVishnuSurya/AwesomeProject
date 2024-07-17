@@ -36,10 +36,10 @@ export default function SaleDeed({ route, navigation }) {
 
     const documentDetail = documentDetails[0];
     const numericValue = parseFloat(data.textInputValue) || 0;
-    const extraPageValue = parseInt(data.extraPage) || 0;
+    const extraPageValue = parseInt(data.totalPage) || 0;
     const subDivisionValue = parseInt(data.subdivision) || 0;
 
-    data.computerFees = 200 + (extraPageValue * 100);
+    data.computerFees = 200 + (extraPageValue > 0 ? (extraPageValue - 10) * 100 : 0);
 
     if (documentDetail.type === "SaleDeed" || documentDetail.type === "Exchange Deed") {
         data.stampValue = Math.ceil(numericValue * documentDetail.stampDuty);
@@ -49,7 +49,7 @@ export default function SaleDeed({ route, navigation }) {
         data.stampValue = Math.ceil(numericValue * documentDetail.stampDuty);
         data.regFees = Math.ceil(numericValue * documentDetail.regFees);
         data.subDivisionFees = subDivisionValue * (data.landType === 'rural' ? 400 : 600);
-    } else if (documentDetail.type === "Sale Aggreement") {
+    } else if (documentDetail.type === "Sale Aggreement" || documentDetail.type === "Trust Deed") {
         data.stampValue = Math.ceil(documentDetail.stampDuty);
         data.regFees = Math.ceil(numericValue * documentDetail.regFees);
     } else if (documentDetail.type === "Construction Aggreement") {
@@ -78,7 +78,7 @@ export default function SaleDeed({ route, navigation }) {
         if (documentDetail.subDivision === "yes") {
             data.subDivisionFees = subDivisionValue * (data.landType === 'rural' ? 400 : 600);
         }
-    } else if (documentDetail.type === "Will" || documentDetail.type === "Receipt" || documentDetail.type === "Power To Sell Immovable Property With Family" || documentDetail.type === "Power To Sell Movable Property and other purposes" || documentDetail.type ==="Adjudication") {
+    } else if (documentDetail.type === "Will" || documentDetail.type === "Receipt" || documentDetail.type === "Power To Sell Immovable Property With Family" || documentDetail.type === "Power To Sell Movable Property and other purposes" || documentDetail.type === "Adjudication" || documentDetail.type === "Cancellation Deed") {
         data.stampValue = documentDetail.stampDuty
         data.regFees = documentDetail.regFees
     } else if (documentDetail.type === "Partnership Deed") {
@@ -140,12 +140,12 @@ export default function SaleDeed({ route, navigation }) {
             }
 
 
-            <Text style={styles.txt}>Extra Page</Text>
+            <Text style={styles.txt}>Total Pages</Text>
             <TextInput
                 style={styles.textInput}
-                onChangeText={(text) => setData(prevData => ({ ...prevData, extraPage: text }))}
-                value={data.extraPage}
-                placeholder="Above 10 pages are considered as extra pages"
+                onChangeText={(text) => setData(prevData => ({ ...prevData, totalPage: text }))}
+                value={data.totalPage}
+                placeholder="Number of pages"
                 keyboardType="numeric"
                 editable={numericValue > 0}
             />
@@ -181,7 +181,7 @@ export default function SaleDeed({ route, navigation }) {
                 </View>
             }
             {
-                data.profile === "WriterOrAdvocate" ? <View>
+                data.profile === "GenerateBill" ? <View>
                     <Text style={styles.txt1}>Stamp Duty: {`${data.stampValue}`}</Text>
                     <Text style={styles.txt1}>Registration Fees: {`${data.regFees}`}</Text>
                     <Text style={styles.txt1}>Computer Fees: {`${data.computerFees}`}</Text>
@@ -193,13 +193,13 @@ export default function SaleDeed({ route, navigation }) {
             }
 
             {
-                data.profile === "WriterOrAdvocate" ? <Button
+                data.profile === "GenerateBill" ? <Button
                     title="Go to Writer Fees"
                     onPress={() => handleNavigate('WriterOrAdvocateFees')}
                 /> : null
             }
             {
-                data.profile !== "WriterOrAdvocate" ? <Button
+                data.profile !== "GenerateBill" ? <Button
                     title="Next"
                     onPress={() => handleNavigate('PDFprint')}
                 /> : null

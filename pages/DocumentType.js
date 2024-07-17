@@ -17,12 +17,12 @@ export default function DocumentType({ route, navigation }) {
         let valid = true;
         let tempErrors = {};
 
-        if (!data.officeName && profile === "WriterOrAdvocate") {
+        if (!data.officeName && profile === "GenerateBill") {
             tempErrors.officeName = 'Office Name is required';
             valid = false;
             console.log("officeName:")
         }
-        if (!data.phoneNo && profile === "WriterOrAdvocate") {
+        if (!data.phoneNo && profile === "GenerateBill") {
 
             if (!/^\d{10}$/.test(data.phoneNo)) {
                 tempErrors.phoneNo = 'Phone No is required and must be 10 digits';
@@ -30,7 +30,7 @@ export default function DocumentType({ route, navigation }) {
                 console.log("phoneNo:")
             }
         }
-        if (!data.customerName && profile === "WriterOrAdvocate") {
+        if (!data.customerName && profile === "GenerateBill") {
             tempErrors.customerName = 'Customer Name is required';
             valid = false;
             console.log("customerName:")
@@ -68,7 +68,7 @@ export default function DocumentType({ route, navigation }) {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             {
-                profile === "WriterOrAdvocate" ? <View>
+                profile === "GenerateBill" ? <View>
 
                     <Text style={styles.txt}>Office Name</Text>
                     <TextInput
@@ -128,8 +128,8 @@ export default function DocumentType({ route, navigation }) {
                 style={styles.picker}
             >
                 {
-                    documentType.map(name => (
-                        <Picker.Item key={name} label={name} value={name} style={styles.pickerItem} />
+                    documentDetails.map(name => (
+                        <Picker.Item key={name.type} label={name.type} value={name.type} style={styles.pickerItem} />
                     ))
                 }
             </Picker>
