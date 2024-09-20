@@ -72,7 +72,7 @@ export default function DocumentDetails({ navigation }) {
                 </View>
             ))}
 
-            {data.inputs.length > 1 && <Button title="-" onPress={closeInput} />}
+            {data.inputs.length > 1 && <Button title="Remove Fees" onPress={closeInput} />}
             <Button title="Add Fees" onPress={addInput} />
 
             <Text style={styles.txt1}>Total: { data.writerFeesTotal}</Text>

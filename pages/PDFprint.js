@@ -10,18 +10,18 @@ export default function PDFprint({ navigation }) {
     const { data, setData } = useContext(MyContext)
 
     const handleNavigate = () => {
-      
-            navigation.navigate("Government Value", {
-                documentDetails
-            });
-      
+
+        navigation.navigate("Government Value", {
+            documentDetails
+        });
+
     };
 
 
     const printHTML = async () => {
-        const inputsHTML = data.inputs.map(input => `
+        const inputsHTML = data.inputs.map(input => input.name !== "" && input.value > 0 ? `
             <p><strong>${input.name}:</strong> ${input.value}</p>
-        `).join('');
+        `: null).join('');
 
         let checkLeaseYears;
         if (data.leaseYears !== "") {
@@ -119,7 +119,10 @@ export default function PDFprint({ navigation }) {
                         data.inputs.map((input, index) => {
                             return (
                                 <View key={input.id} style={styles.inputContainer}>
-                                    <Text style={styles.txt1}>{`${input.name} : ${input.value}`}</Text>
+                                    {
+                                        input.name !== "" && input.value > 0 ? <Text style={styles.txt1}>{`${input.name} : ${input.value}`}</Text> : null
+                                    }
+
                                 </View>
                             );
                         })

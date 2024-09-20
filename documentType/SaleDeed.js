@@ -180,7 +180,7 @@ export default function SaleDeed({ route, navigation }) {
                     />
                 </View>
             }
-            {
+            {/* {
                 data.profile === "GenerateBill" ? <View>
                     <Text style={styles.txt1}>Stamp Duty: {`${data.stampValue}`}</Text>
                     <Text style={styles.txt1}>Registration Fees: {`${data.regFees}`}</Text>
@@ -190,7 +190,7 @@ export default function SaleDeed({ route, navigation }) {
                     <Text style={styles.txt1}>Welfare Fees: {`${data.welfareFees}`}</Text>
                     <Text style={styles.txt1}>Total: {`${data.govtFeesTotal}`}</Text>
                 </View> : null
-            }
+            } */}
 
             {
                 data.profile === "GenerateBill" ? <Button
